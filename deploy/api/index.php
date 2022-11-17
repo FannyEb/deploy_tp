@@ -10,13 +10,34 @@ const JWT_SECRET = "makey1234567";
 
 $app = AppFactory::create();
 
+//create JWT
+function createJWT(Response $response): Response{
 
-$app->get('/api/hello/{name}', function (Request $request, Response $response, $args) {
-    $array = [];
-    $array ["nom"] = $args ['name'];
-    $response->getBody()->write(json_encode ($array));
+    $issuedAt = time();
+    $expirationTime = $issuedAt + 600;
+    $payload = array(
+        'userid' => '1',
+        'email' => 'fannyeber@gmail.com',
+        'pseudo' => 'pandabrutie',
+        'iat' => $issuedAt,
+        'exp' => $expirationTime
+    );
+    $token_jwt = JWT::encode($payload, JWT_SECRET, "HS256");
+    $response = $response->withHeader("Authorization", "Bearer {$token_jwt}");
+    
     return $response;
+}
+
+//login
+$app->post('/api/login', function (Request $request, Response $response, $args) {
+    $array = [];
+    $array ["login"] = $args ['login'];
+    $array ["password"] = $args ['password'];
+
+    $response->getBody()->write(json_encode ($array));
+    return createJWT($response);
 });
+
 
 $options = [
     "attribute" => "token",
@@ -26,7 +47,7 @@ $options = [
     "algorithm" => ["HS256"],
     "secret" => JWT_SECRET,
     "path" => ["/api"],
-    "ignore" => ["/api/hello"],
+    "ignore" => ["/api/hello", "/api/login"],
     "error" => function ($response, $arguments) {
         $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
         $response = $response->withStatus(401);
