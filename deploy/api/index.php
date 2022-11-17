@@ -10,6 +10,10 @@ const JWT_SECRET = "makey1234567";
 
 $app = AppFactory::create();
 
+/**************/
+/* Manage JWT */
+/**************/
+
 //create JWT
 function createJWT(Response $response): Response{
 
@@ -28,6 +32,28 @@ function createJWT(Response $response): Response{
     return $response;
 }
 
+
+$options = [
+    "attribute" => "token",
+    "header" => "Authorization",
+    "regexp" => "/Bearer\s+(.*)$/i",
+    "secure" => false,
+    "algorithm" => ["HS256"],
+    "secret" => JWT_SECRET,
+    "path" => ["/api"],
+    "ignore" => ["/api/hello", "/api/login"],
+    "error" => function ($response, $arguments) {
+        $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
+        $response = $response->withStatus(401);
+        return $response->withHeader("Content-Type", "application/json")->getBody()->write(json_encode($data));
+    }
+];
+
+$app->add(new Tuupola\Middleware\JwtAuthentication($options));
+
+/***************/
+/* Manage User */
+/***************/
 //login
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
     $err=false;
@@ -51,14 +77,6 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     return $response;
 });
 
-//hello
-$app->get('/api/hello/{name}', function (Request $request, Response $response, $args) {
-    $array = [];
-    $array ["nom"] = $args ['name'];
-    $response->getBody()->write(json_encode ($array));
-    return $response;
-});
-
 //get user 
 $app->get('/api/user', function (Request $request, Response $response, $args) {
     $array = [];
@@ -68,22 +86,24 @@ $app->get('/api/user', function (Request $request, Response $response, $args) {
     return $response;
 });
 
+/*****************/
+/* Manage Client */
+/*****************/
+//get all client
+//get client by id
+//add client
+//delete client
+//update client
 
-$options = [
-    "attribute" => "token",
-    "header" => "Authorization",
-    "regexp" => "/Bearer\s+(.*)$/i",
-    "secure" => false,
-    "algorithm" => ["HS256"],
-    "secret" => JWT_SECRET,
-    "path" => ["/api"],
-    "ignore" => ["/api/hello", "/api/login"],
-    "error" => function ($response, $arguments) {
-        $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
-        $response = $response->withStatus(401);
-        return $response->withHeader("Content-Type", "application/json")->getBody()->write(json_encode($data));
-    }
-];
 
-$app->add(new Tuupola\Middleware\JwtAuthentication($options));
+/*******************/
+/* Manage Products */
+/*******************/
+//get all products
+//get product by id
+//add product
+//delete product
+//update product
+
+
 $app->run ();
