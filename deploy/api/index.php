@@ -36,16 +36,13 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     $password = $body ['password'] ?? "";
 
     //check format login and password
-    if (!preg_match("/[a-zA-Z0-9]{1,20}/", $login)){
-        $err = true;
-    }
-    if (!preg_match("/[a-zA-Z0-9]{1,20}/", $password)){
+    if (empty($login) || empty($password) || !preg_match("/^[a-zA-Z0-9]+$/", $login) || !preg_match("/^[a-zA-Z0-9]+$/", $password)) {
         $err=true;
     }
  
     if (!$err) {
         $response = createJwT($response);
-        $data = array('nom' => 'Eber', 'prenom' => 'Fanny');
+        $data = array('login' => $login);
         $response->getBody()->write(json_encode($data));
     }
     else{          
