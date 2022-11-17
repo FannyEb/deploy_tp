@@ -29,13 +29,46 @@ function createJWT(Response $response): Response{
 }
 
 //login
-$app->post('/api/login', function (Request $request, Response $response, $args) {
-    $array = [];
-    $array ["login"] = $args ['login'];
-    $array ["password"] = $args ['password'];
+$app->post('/api/login', function (Request $request, Response $response, $args) {   
+    $err=false;
+    $body = $request->getParsedBody(); 
+    $login = $body ['login'] ?? ""; 
+    $password = $body ['password'] ?? "";
 
+    //check format login and password
+    if (!preg_match("/[a-zA-Z0-9]{1,20}/", $login)){
+        $err = true;
+    }
+    if (!preg_match("/[a-zA-Z0-9]{1,20}/", $password)){
+        $err=true;
+    }
+ 
+    if (!$err) {
+        $response = createJwT($response);
+        $data = array('nom' => 'Eber', 'prenom' => 'Fanny');
+        $response->getBody()->write(json_encode($data));
+    }
+    else{          
+        $response = $response->withStatus(401);
+    }
+    return $response;
+});
+
+//hello
+$app->get('/api/hello/{name}', function (Request $request, Response $response, $args) {
+    $array = [];
+    $array ["nom"] = $args ['name'];
     $response->getBody()->write(json_encode ($array));
-    return createJWT($response);
+    return $response;
+});
+
+//get user 
+$app->get('/api/user', function (Request $request, Response $response, $args) {
+    $array = [];
+    $array ["nom"] = "Eber";
+    $array ["prenom"] = "Fanny";
+    $response->getBody()->write(json_encode ($array));
+    return $response;
 });
 
 
