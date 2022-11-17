@@ -36,7 +36,7 @@ WORKDIR /var/www/html
 
 RUN composer update
 
-RUN php vendor/bin/doctrine orm:convert-mapping --namespace="" --force --from-database yml ./config/yaml
+# RUN php vendor/bin/doctrine orm:convert-mapping --namespace="" --force --from-database yml ./config/yaml
 
 RUN ls -al
 
