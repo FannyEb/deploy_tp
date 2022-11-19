@@ -45,7 +45,6 @@ $options = [
     }
 ];
 
-$app->add(new Tuupola\Middleware\JwtAuthentication($options));
 
 //login
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
@@ -288,4 +287,6 @@ $app->delete('/api/clients/{id}', function (Request $request, Response $response
 });
 
 #endregion
+$app->add(new Tuupola\Middleware\JwtAuthentication($options));
+
 $app->run ();
