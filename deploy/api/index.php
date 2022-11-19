@@ -45,6 +45,7 @@ $options = [
     }
 ];
 
+#region USER 
 
 //login
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
@@ -85,6 +86,7 @@ $app->get('/api/user', function (Request $request, Response $response, $args) {
     $response->getBody()->write(json_encode ($array));
     return $response;
 });
+#endregion
 
 #region PRODUCTS
 
@@ -97,7 +99,7 @@ $app->get('/api/product', function (Request $request, Response $response, $args)
 
 //get product by id from ./mock/catalogue.json
 $app->get('/api/product/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
+    $json = file_get_contents("./mock/catalogue.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     $array = $array[$id];
@@ -122,12 +124,12 @@ $app->post('/api/product', function (Request $request, Response $response, $args
     }
 
     if (!$err) {
-        $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
+        $json = file_get_contents("./mock/catalogue.json");
         $array = json_decode($json, true);
         $id = count($array);
         $array[] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
         $json = json_encode($array);
-        file_put_contents(__DIR__ . "/../mock/catalogue.json", $json);
+        file_put_contents("./mock/catalogue.json", $json);
         $response->getBody()->write($json);
     }
     else{          
@@ -153,12 +155,12 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
     }
 
     if (!$err) {
-        $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
+        $json = file_get_contents("./mock/catalogue.json");
         $array = json_decode($json, true);
         $id = $args ['id'];
         $array[$id] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
         $json = json_encode($array);
-        file_put_contents(__DIR__ . "/../mock/catalogue.json", $json);
+        file_put_contents("./mock/catalogue.json", $json);
         $response->getBody()->write($json);
     }
     else{          
@@ -169,12 +171,12 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
 
 //delete product to ./mock/catalogue.json
 $app->delete('/api/product/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
+    $json = file_get_contents("./mock/catalogue.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     unset($array[$id]);
     $json = json_encode($array);
-    file_put_contents(__DIR__ . "/../mock/catalogue.json", $json);
+    file_put_contents("./mock/catalogue.json", $json);
     $response->getBody()->write($json);
     return $response;
 });
@@ -185,14 +187,14 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 
 //get all client from ./mock/clients.json
 $app->get('/api/clients', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/clients.json");
+    $json = file_get_contents("./mock/clients.json");
     $response->getBody()->write($json);
     return $response;
 });
 
 //get client by id from ./mock/clients.json
 $app->get('/api/clients/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/clients.json");
+    $json = file_get_contents("./mock/clients.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     $array = $array[$id];
@@ -223,12 +225,12 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
     }
 
     if (!$err) {
-        $json = file_get_contents(__DIR__ . "/../mock/clients.json");
+        $json = file_get_contents("./mock/clients.json");
         $array = json_decode($json, true);
         $id = count($array);
         $array[] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
-        file_put_contents(__DIR__ . "/../mock/clients.json", $json);
+        file_put_contents("./mock/clients.json", $json);
         $response->getBody()->write($json);
     }
     else{          
@@ -260,12 +262,12 @@ $app->put('/api/clients/{id}', function (Request $request, Response $response, $
     }
 
     if (!$err) {
-        $json = file_get_contents(__DIR__ . "/../mock/clients.json");
+        $json = file_get_contents("./mock/clients.json");
         $array = json_decode($json, true);
         $id = $args ['id'];
         $array[$id] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
-        file_put_contents(__DIR__ . "/../mock/clients.json", $json);
+        file_put_contents("./mock/clients.json", $json);
         $response->getBody()->write($json);
     }
     else{          
@@ -276,12 +278,12 @@ $app->put('/api/clients/{id}', function (Request $request, Response $response, $
 
 //delete client to ./mock/clients.json
 $app->delete('/api/clients/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/clients.json");
+    $json = file_get_contents("./mock/clients.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     unset($array[$id]);
     $json = json_encode($array);
-    file_put_contents(__DIR__ . "/../mock/clients.json", $json);
+    file_put_contents("./mock/clients.json", $json);
     $response->getBody()->write($json);
     return $response;
 });
