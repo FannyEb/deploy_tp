@@ -55,9 +55,9 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     $password = $body ['password'] ?? "";
 
     //check format login and password
-    if (empty($login) || empty($password)) {
-        $err=true;
-    }
+    // if (empty($login) || empty($password)) {
+    //     $err=true;
+    // }
  
     if (!$err) {
         $response = createJwT($response);
