@@ -50,8 +50,8 @@ $options = [
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
     $err=false;
     $body = $request->getParsedBody(); 
-    $login = $body ['login'] ?? ""; 
-    $password = $body ['password'] ?? "";
+    $login = $body['login'] ?? ""; 
+    $password = $body['password'] ?? "";
 
     //check format login and password
     // if (empty($login) || empty($password)) {
