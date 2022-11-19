@@ -14,7 +14,7 @@ $app = AppFactory::create();
 function createJWT(Response $response): Response{
 
     $issuedAt = time();
-    $expirationTime = $issuedAt + 600;
+    $expirationTime = $issuedAt + 60000;
     $payload = array(
         'userid' => '1',
         'email' => 'fannyeber@gmail.com',
@@ -89,14 +89,14 @@ $app->get('/api/user', function (Request $request, Response $response, $args) {
 #region PRODUCTS
 
 //get all product from ./mock/catalogue.json
-$app->get('/api/catalogue', function (Request $request, Response $response, $args) {
-    $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
+$app->get('/api/product', function (Request $request, Response $response, $args) {
+    $json = file_get_contents("./mock/catalogue.json");
     $response->getBody()->write($json);
     return $response;
 });
 
 //get product by id from ./mock/catalogue.json
-$app->get('/api/catalogue/{id}', function (Request $request, Response $response, $args) {
+$app->get('/api/product/{id}', function (Request $request, Response $response, $args) {
     $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
@@ -106,7 +106,7 @@ $app->get('/api/catalogue/{id}', function (Request $request, Response $response,
 });
 
 //add product to ./mock/catalogue.json
-$app->post('/api/catalogue', function (Request $request, Response $response, $args) {
+$app->post('/api/product', function (Request $request, Response $response, $args) {
     $body = $request->getParsedBody(); 
     $name = $body ['name'] ?? ""; 
     $price = $body ['price'] ?? "";
@@ -137,7 +137,7 @@ $app->post('/api/catalogue', function (Request $request, Response $response, $ar
 });
 
 //update product to ./mock/catalogue.json
-$app->put('/api/catalogue/{id}', function (Request $request, Response $response, $args) {
+$app->put('/api/product/{id}', function (Request $request, Response $response, $args) {
     $body = $request->getParsedBody(); 
     $name = $body ['name'] ?? ""; 
     $price = $body ['price'] ?? "";
@@ -168,7 +168,7 @@ $app->put('/api/catalogue/{id}', function (Request $request, Response $response,
 });
 
 //delete product to ./mock/catalogue.json
-$app->delete('/api/catalogue/{id}', function (Request $request, Response $response, $args) {
+$app->delete('/api/product/{id}', function (Request $request, Response $response, $args) {
     $json = file_get_contents(__DIR__ . "/../mock/catalogue.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
