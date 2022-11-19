@@ -45,6 +45,18 @@ $options = [
     }
 ];
 
+
+function  addHeaders (Response $response) : Response {
+    $response = $response
+    ->withHeader("Content-Type", "application/json")
+    ->withHeader('Access-Control-Allow-Origin', ('https://met02-eber.onrender.com'))
+    ->withHeader('Access-Control-Allow-Headers', 'Content-Type,  Authorization')
+    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    ->withHeader('Access-Control-Expose-Headers', 'Authorization');
+
+    return $response;
+}
+
 #region USER 
 
 //login
@@ -61,6 +73,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
  
     if (!$err) {
         $response = createJwT($response);
+        $response = addHeaders($response);
         $data = array('login' => $login);
         $response->getBody()->write(json_encode($data));
     }
@@ -83,6 +96,7 @@ $app->get('/api/user', function (Request $request, Response $response, $args) {
     $array = [];
     $array ["nom"] = "Eber";
     $array ["prenom"] = "Fanny";
+    $response = addHeaders($response);
     $response->getBody()->write(json_encode ($array));
     return $response;
 });
@@ -93,6 +107,7 @@ $app->get('/api/user', function (Request $request, Response $response, $args) {
 //get all product from ./mock/catalogue.json
 $app->get('/api/product', function (Request $request, Response $response, $args) {
     $json = file_get_contents("./mock/catalogue.json");
+    $response = addHeaders($response);
     $response->getBody()->write($json);
     return $response;
 });
@@ -103,6 +118,7 @@ $app->get('/api/product/{id}', function (Request $request, Response $response, $
     $array = json_decode($json, true);
     $id = $args ['id'];
     $array = $array[$id];
+    $response = addHeaders($response);
     $response->getBody()->write(json_encode ($array));
     return $response;
 });
@@ -130,6 +146,7 @@ $app->post('/api/product', function (Request $request, Response $response, $args
         $array[] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
         $json = json_encode($array);
         file_put_contents("./mock/catalogue.json", $json);
+        $response = addHeaders($response);
         $response->getBody()->write($json);
     }
     else{          
@@ -161,6 +178,7 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
         $array[$id] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
         $json = json_encode($array);
         file_put_contents("./mock/catalogue.json", $json);
+        $response = addHeaders($response);
         $response->getBody()->write($json);
     }
     else{          
@@ -178,6 +196,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
     $json = json_encode($array);
     file_put_contents("./mock/catalogue.json", $json);
     $response->getBody()->write($json);
+    $response = addHeaders($response);
     return $response;
 });
 
@@ -188,6 +207,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 //get all client from ./mock/clients.json
 $app->get('/api/clients', function (Request $request, Response $response, $args) {
     $json = file_get_contents("./mock/clients.json");
+    $response = addHeaders($response);
     $response->getBody()->write($json);
     return $response;
 });
@@ -198,6 +218,7 @@ $app->get('/api/clients/{id}', function (Request $request, Response $response, $
     $array = json_decode($json, true);
     $id = $args ['id'];
     $array = $array[$id];
+    $response = addHeaders($response);
     $response->getBody()->write(json_encode ($array));
     return $response;
 });
@@ -230,6 +251,7 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
         $id = count($array);
         $array[] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
+        $response = addHeaders($response);
         file_put_contents("./mock/clients.json", $json);
         $response->getBody()->write($json);
     }
@@ -268,6 +290,7 @@ $app->put('/api/clients/{id}', function (Request $request, Response $response, $
         $array[$id] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
         file_put_contents("./mock/clients.json", $json);
+        $response = addHeaders($response);
         $response->getBody()->write($json);
     }
     else{          
@@ -284,6 +307,7 @@ $app->delete('/api/clients/{id}', function (Request $request, Response $response
     unset($array[$id]);
     $json = json_encode($array);
     file_put_contents("./mock/clients.json", $json);
+    $response = addHeaders($response);
     $response->getBody()->write($json);
     return $response;
 });
