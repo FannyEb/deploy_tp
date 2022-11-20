@@ -258,12 +258,9 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     if (!$err) {
         $json = file_get_contents("./mock/client.json");
         $array = json_decode($json, true);
-        print_r('array '+$array);
         $id = count($array);
-        print_r('id '+$id);
         $array[] = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
-        print_r('json '+$json);
         $response = addHeaders($response);
         file_put_contents("./mock/client.json", $json);
         $response->getBody()->write($json);
