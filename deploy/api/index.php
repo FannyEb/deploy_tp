@@ -230,13 +230,13 @@ $app->get('/api/clients/{id}', function (Request $request, Response $response, $
 $app->post('/api/clients', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
-    $lastName = $body ['lastname'] ?? ""; 
-    $firstName = $body ['firstname'] ?? "";
+    $lastName = $body ['lastName'] ?? ""; 
+    $firstName = $body ['firstName'] ?? "";
     $email = $body ['email'] ?? "";
     $phone = $body ['phone'] ?? "";
     $address = $body ['address'] ?? "";
     $city = $body ['city'] ?? "";
-    $codeCity = $body ['codecity'] ?? "";
+    $codeCity = $body ['codeCity'] ?? "";
     $country = $body ['country'] ?? "";
     $login = $body ['login'] ?? "";
     $password = $body ['password'] ?? "";
@@ -253,7 +253,7 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
         $json = file_get_contents("./mock/clients.json");
         $array = json_decode($json, true);
         $id = count($array);
-        $array[] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
+        $array[] = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
         $response = addHeaders($response);
         file_put_contents("./mock/clients.json", $json);
