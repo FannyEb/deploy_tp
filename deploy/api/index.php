@@ -137,7 +137,9 @@ $app->post('/api/product', function (Request $request, Response $response, $args
     $err=false;
 
     //check format name, price, description and image
-    if (empty($name) || empty($price) || empty($description) || empty($image) || !preg_match("/^[a-zA-Z0-9]/", $name) || !preg_match("/^[0-9]/", $price) || !preg_match("/^[a-zA-Z0-9]/", $description) || !preg_match("/^[a-zA-Z0-9]/", $image)) {
+    if (empty($name) || empty($price) || empty($description) || empty($image) || 
+    !preg_match("/^[a-zA-Z0-9]+$/", $name) || !preg_match("/^[0-9]+$/", $price) || !preg_match("/^[a-zA-Z0-9]+$/", $description) || 
+    !preg_match("/^[a-zA-Z0-9]+$/", $image)) {
         $err=true;
     }
 
@@ -170,7 +172,9 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
     $err=false;
 
     //check format name, price, description and image
-    if (empty($name) || empty($price) || empty($description) || empty($image) || !preg_match("/^[a-zA-Z0-9]/", $name) || !preg_match("/^[0-9]/", $price) || !preg_match("/^[a-zA-Z0-9]/", $description) || !preg_match("/^[a-zA-Z0-9]/", $image)) {
+    if (empty($name) || empty($price) || empty($description) || empty($image) || 
+    !preg_match("/^[a-zA-Z0-9]+$/", $name) || !preg_match("/^[0-9]+$/", $price) || !preg_match("/^[a-zA-Z0-9]+$/", $description) || 
+    !preg_match("/^[a-zA-Z0-9]+$/", $image)) {
         $err=true;
     }
 
@@ -245,7 +249,10 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
 
     //check format 
     if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codeCity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
-        !preg_match("/^[a-zA-Z0-9]/", $lastName) || !preg_match("/^[a-zA-Z0-9]/", $firstName) || !preg_match("/^[a-zA-Z0-9]/", $email) || !preg_match("/^[0-9]/", $phone) || !preg_match("/^[a-zA-Z0-9]/", $address) || !preg_match("/^[a-zA-Z0-9]/", $city) || !preg_match("/^[0-9]/", $codeCity) || !preg_match("/^[a-zA-Z0-9]/", $country) || !preg_match("/^[a-zA-Z0-9]/", $login) || !preg_match("/^[a-zA-Z0-9/" , $password) || !preg_match("/^[a-zA-Z0-9]/", $civility)) {
+        !preg_match("/^[a-zA-Z0-9]+$/", $lastName) || !preg_match("/^[a-zA-Z0-9]+$/", $firstName) || !preg_match("/^[a-zA-Z0-9]+$/", $email) || 
+        !preg_match("/^[0-9]+$/", $phone) || !preg_match("/^[a-zA-Z0-9]+$/", $address) || !preg_match("/^[a-zA-Z0-9]+$/", $city) || 
+        !preg_match("/^[0-9]+$/", $codeCity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $login) || 
+        !preg_match("/^[a-zA-Z0-9]+$/" , $password) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
         $err=true;
     }
 
@@ -287,7 +294,10 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
 
     //check format 
     if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codeCity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
-        !preg_match("/^[a-zA-Z0-9]/", $lastName) || !preg_match("/^[a-zA-Z0-9]/", $firstName) || !preg_match("/^[a-zA-Z0-9]/", $email) || !preg_match("/^[0-9]/", $phone) || !preg_match("/^[a-zA-Z0-9]/", $address) || !preg_match("/^[a-zA-Z0-9]/", $city) || !preg_match("/^[0-9]/", $codeCity) || !preg_match("/^[a-zA-Z0-9]/", $country) || !preg_match("/^[a-zA-Z0-9]/", $login) || !preg_match("/^[a-zA-Z0-9/" , $password) || !preg_match("/^[a-zA-Z0-9]/", $civility)) {
+        !preg_match("/^[a-zA-Z0-9]+$/", $lastName) || !preg_match("/^[a-zA-Z0-9]+$/", $firstName) || !preg_match("/^[a-zA-Z0-9]+$/", $email) || 
+        !preg_match("/^[0-9]+$/", $phone) || !preg_match("/^[a-zA-Z0-9]+$/", $address) || !preg_match("/^[a-zA-Z0-9]+$/", $city) || 
+        !preg_match("/^[0-9]+$/", $codeCity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $login) || 
+        !preg_match("/^[a-zA-Z0-9]+$/" , $password) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
         $err=true;
     }
 
