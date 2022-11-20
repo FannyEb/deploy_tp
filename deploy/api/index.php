@@ -269,13 +269,13 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
 $app->put('/api/clients/{id}', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
-    $lastName = $body ['lastname'] ?? ""; 
-    $firstName = $body ['firstname'] ?? "";
+    $lastName = $body ['lastName'] ?? ""; 
+    $firstName = $body ['firstName'] ?? "";
     $email = $body ['email'] ?? "";
     $phone = $body ['phone'] ?? "";
     $address = $body ['address'] ?? "";
     $city = $body ['city'] ?? "";
-    $codeCity = $body ['codecity'] ?? "";
+    $codeCity = $body ['codeCity'] ?? "";
     $country = $body ['country'] ?? "";
     $login = $body ['login'] ?? "";
     $password = $body ['password'] ?? "";
