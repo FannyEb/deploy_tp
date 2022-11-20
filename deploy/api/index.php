@@ -209,7 +209,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 
 //get all client from ./mock/clients.json
 $app->get('/api/clients', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
+    $json = file_get_contents("./mock/client.json");
     $response = addHeaders($response);
     $response->getBody()->write($json);
     return $response;
@@ -217,7 +217,7 @@ $app->get('/api/clients', function (Request $request, Response $response, $args)
 
 //get client by id from ./mock/clients.json
 $app->get('/api/clients/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
+    $json = file_get_contents("./mock/client.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     $array = $array[$id];
@@ -250,13 +250,13 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/clients.json");
+        $json = file_get_contents("./mock/client.json");
         $array = json_decode($json, true);
         $id = count($array);
         $array[] = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
         $response = addHeaders($response);
-        file_put_contents("./mock/clients.json", $json);
+        file_put_contents("./mock/client.json", $json);
         $response->getBody()->write($json);
     }
     else{          
@@ -289,12 +289,12 @@ $app->put('/api/clients/{id}', function (Request $request, Response $response, $
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/clients.json");
+        $json = file_get_contents("./mock/client.json");
         $array = json_decode($json, true);
         $id = $args ['id'];
         $array[$id] = array('id' => $id, 'lastname' => $lastName, 'firstname' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codecity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
-        file_put_contents("./mock/clients.json", $json);
+        file_put_contents("./mock/client.json", $json);
         $response = addHeaders($response);
         $response->getBody()->write($json);
     }
@@ -306,12 +306,12 @@ $app->put('/api/clients/{id}', function (Request $request, Response $response, $
 
 //delete client to ./mock/clients.json
 $app->delete('/api/clients/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
+    $json = file_get_contents("./mock/client.json");
     $array = json_decode($json, true);
     $id = $args ['id'];
     unset($array[$id]);
     $json = json_encode($array);
-    file_put_contents("./mock/clients.json", $json);
+    file_put_contents("./mock/client.json", $json);
     $response = addHeaders($response);
     $response->getBody()->write($json);
     return $response;
