@@ -62,7 +62,6 @@ function  addHeaders (Response $response) : Response {
 //login
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
     $err=false;
-    // $body = $request->getParsedBody();
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $login = $body['login'] ?? ""; 
@@ -127,7 +126,8 @@ $app->get('/api/product/{id}', function (Request $request, Response $response, $
 
 //add product to ./mock/catalogue.json
 $app->post('/api/product', function (Request $request, Response $response, $args) {
-    $body = $request->getParsedBody(); 
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $name = $body ['name'] ?? ""; 
     $price = $body ['price'] ?? "";
     $description = $body ['description'] ?? "";
@@ -159,7 +159,8 @@ $app->post('/api/product', function (Request $request, Response $response, $args
 
 //update product to ./mock/catalogue.json
 $app->put('/api/product/{id}', function (Request $request, Response $response, $args) {
-    $body = $request->getParsedBody(); 
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $name = $body ['name'] ?? ""; 
     $price = $body ['price'] ?? "";
     $description = $body ['description'] ?? "";
@@ -227,7 +228,8 @@ $app->get('/api/clients/{id}', function (Request $request, Response $response, $
 
 //add client to ./mock/clients.json
 $app->post('/api/clients', function (Request $request, Response $response, $args) {
-    $body = $request->getParsedBody(); 
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $lastName = $body ['lastname'] ?? ""; 
     $firstName = $body ['firstname'] ?? "";
     $email = $body ['email'] ?? "";
@@ -265,7 +267,8 @@ $app->post('/api/clients', function (Request $request, Response $response, $args
 
 //update client to ./mock/clients.json
 $app->put('/api/clients/{id}', function (Request $request, Response $response, $args) {
-    $body = $request->getParsedBody(); 
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $lastName = $body ['lastname'] ?? ""; 
     $firstName = $body ['firstname'] ?? "";
     $email = $body ['email'] ?? "";
