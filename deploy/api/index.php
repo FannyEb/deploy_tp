@@ -48,7 +48,7 @@ $options = [
 
 function  addHeaders (Response $response) : Response {
     $response = $response
-    ->withHeader("Content-Type", "form-data")
+    ->withHeader("Content-Type", "application/json")
     ->withHeader('Access-Control-Allow-Origin', ('https://met02-eber.onrender.com'))
     ->withHeader('Access-Control-Allow-Headers', 'Content-Type,  Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
@@ -62,7 +62,9 @@ function  addHeaders (Response $response) : Response {
 //login
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
     $err=false;
-    $body = $request->getParsedBody(); 
+    // $body = $request->getParsedBody();
+    $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $login = $body['login'] ?? ""; 
     $password = $body['password'] ?? "";
 
