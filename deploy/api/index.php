@@ -210,7 +210,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 #endregion
 
 #region CLIENT
-$clients = [];
+$clients = [array('id' => "0", 'lastName' => "EBER", 'firstName' => "fanny", 'email' => "fanny.eber@gmai.com", 'phone' => "0781036020", 'address' => "test", 'city' => "test", 'codeCity' => "67100", 'country' => "France", 'login' => "test", 'password' => "test", 'civility' => 0)];
 
 //get all client from $clients
 $app->get('/api/client', function (Request $request, Response $response, $args) {
