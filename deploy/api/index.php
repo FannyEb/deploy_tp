@@ -255,11 +255,10 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     }
 
     if (!$err) {
-        global $clients;
-        $id = count($clients);
-        array_push($clients, array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility));
+        $id = count($GLOBALS['clients']);
+        array_push($GLOBALS['clients'], array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility));
         $response = addHeaders($response);
-        $response->getBody()->write(json_encode ($clients));
+        $response->getBody()->write(json_encode ($GLOBALS['clients']));
     }
     else{          
         $response = $response->withStatus(401);
