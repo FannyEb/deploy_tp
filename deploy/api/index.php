@@ -233,7 +233,8 @@ $app->get('/api/client/{id}', function (Request $request, Response $response, $a
 //add client to the array ./mock/clients.json
 $app->post('/api/client', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
-    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array
+    $id = $body ['id'] ?? ""; 
     $lastName = $body ['lastName'] ?? ""; 
     $firstName = $body ['firstName'] ?? "";
     $email = $body ['email'] ?? "";
@@ -256,12 +257,14 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/clients.json");
-        $array = json_decode($json, true);
-        $id = count($array);
-        $array[$id] = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
+        // $json = file_get_contents("./mock/clients.json");
+        // $array = json_decode($json, true);
+        // $id = count($array);
+
+        //Create a new client in an array
+        $array = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
         $json = json_encode($array);
-        file_put_contents("./mock/clients.json", $json);
+        // file_put_contents("./mock/clients.json", $json);
         $response = addHeaders($response);
         $response->getBody()->write($json);
     }
