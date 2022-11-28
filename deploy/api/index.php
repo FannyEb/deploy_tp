@@ -49,7 +49,7 @@ $options = [
 function  addHeaders (Response $response) : Response {
     $response = $response
     ->withHeader("Content-Type", "application/json")
-    ->withHeader('Access-Control-Allow-Origin', ('https://met02-eber.onrender.com'))
+    ->withHeader('Access-Control-Allow-Origin', '*')
     ->withHeader('Access-Control-Allow-Headers', 'Content-Type,  Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     ->withHeader('Access-Control-Expose-Headers', 'Authorization');
