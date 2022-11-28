@@ -330,7 +330,7 @@ $app->delete('/api/client/{id}', function (Request $request, Response $response,
 #endregion
 $app->add(new Tuupola\Middleware\JwtAuthentication($options));
 $app->add(new Tuupola\Middleware\CorsMiddleware([
-    "origin" => ["https://met02-eber-api.onrender.com/"],
+    "origin" => ["*"],
     "methods" => ["GET", "POST", "PUT", "PATCH", "DELETE"],
     "headers.allow" => ["Authorization", "Content-Type"],
     "headers.expose" => ["Authorization"],
