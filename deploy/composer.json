@@ -11,6 +11,7 @@
         "tuupola/slim-jwt-auth": "^3.5",
         "doctrine/orm": "^2.6.2",
         "symfony/yaml": "2.*",
+        "tuupola/cors-middleware": "^1.4",
 	 "symfony/cache": "^5.3"
 
     },
