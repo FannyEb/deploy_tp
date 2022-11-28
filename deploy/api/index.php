@@ -11,14 +11,13 @@ const JWT_SECRET = "makey1234567";
 $app = AppFactory::create();
 
 //create JWT
-function createJWT(Response $response): Response{
+function createJWT(Response $response, $login, $password): Response{
 
     $issuedAt = time();
-    $expirationTime = $issuedAt + 60000;
+    $expirationTime = $issuedAt + 600;
     $payload = array(
-        'userid' => '1',
-        'email' => 'fannyeber@gmail.com',
-        'pseudo' => 'pandabrutie',
+        'login' => $login,
+        'password' => $password,
         'iat' => $issuedAt,
         'exp' => $expirationTime
     );
@@ -330,5 +329,10 @@ $app->delete('/api/client/{id}', function (Request $request, Response $response,
 
 #endregion
 $app->add(new Tuupola\Middleware\JwtAuthentication($options));
-
+$app->add(new Tuupola\Middleware\CorsMiddleware([
+    "origin" => ["https://met02-eber-api.onrender.com/"],
+    "methods" => ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    "headers.allow" => ["Authorization", "Content-Type"],
+    "headers.expose" => ["Authorization"],
+]));
 $app->run ();
