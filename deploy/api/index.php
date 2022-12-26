@@ -36,7 +36,7 @@ class Client
     public $password;
     public $address;
     public $city;
-    public $codeCity;
+    public $codecity;
     public $country;
 }
 
@@ -261,7 +261,7 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     $phone = $body ['phone'] ?? "";
     $address = $body ['address'] ?? "";
     $city = $body ['city'] ?? "";
-    $codeCity = $body ['codeCity'] ?? "";
+    $codecity = $body ['codeCity'] ?? "";
     $country = $body ['country'] ?? "";
     $login = $body ['login'] ?? "";
     $password = $body ['password'] ?? "";
@@ -269,10 +269,10 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     $err=false;
 
     //check format name, email and password
-    if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codeCity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
+    if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codecity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
         !preg_match("/^[a-zA-Z0-9]+$/", $lastName) || !preg_match("/^[a-zA-Z0-9]+$/", $firstName) ||  
         !preg_match("/^[a-zA-Z0-9]+$/", $city) || 
-        !preg_match("/^[0-9]+$/", $codeCity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
+        !preg_match("/^[0-9]+$/", $codecity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
         $err=true;
     }
 
@@ -286,7 +286,7 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
         $client->setPhone($phone);
         $client->setAddress($address);
         $client->setCity($city);
-        $client->setCodeCity($codeCity);
+        $client->setCodecity($codecity);
         $client->setCountry($country);
         $client->setLogin($login);
         $client->setPassword($password);
@@ -312,7 +312,7 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
     $phone = $body ['phone'] ?? "";
     $address = $body ['address'] ?? "";
     $city = $body ['city'] ?? "";
-    $codeCity = $body ['codeCity'] ?? "";
+    $codecity = $body ['codeCity'] ?? "";
     $country = $body ['country'] ?? "";
     $login = $body ['login'] ?? "";
     $password = $body ['password'] ?? "";
@@ -320,10 +320,10 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
     $err=false;
 
     //check format name, email and password
-    if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codeCity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
+    if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codecity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
         !preg_match("/^[a-zA-Z0-9]+$/", $lastName) || !preg_match("/^[a-zA-Z0-9]+$/", $firstName) ||  
         !preg_match("/^[a-zA-Z0-9]+$/", $city) || 
-        !preg_match("/^[0-9]+$/", $codeCity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
+        !preg_match("/^[0-9]+$/", $codecity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
         $err=true;
     }
 
@@ -337,7 +337,7 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
         $client->setPhone($phone);
         $client->setAddress($address);
         $client->setCity($city);
-        $client->setCodeCity($codeCity);
+        $client->setCodecity($codecity);
         $client->setCountry($country);
         $client->setLogin($login);
         $client->setPassword($password);
