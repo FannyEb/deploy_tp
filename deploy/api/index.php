@@ -5,10 +5,40 @@ use Slim\Factory\AppFactory;
 use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
 require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../bootstrap.php';
  
 const JWT_SECRET = "makey1234567";
 
 $app = AppFactory::create();
+$app->addErrorMiddleware(true, true, true);
+
+//class product
+class Product
+{
+    public $id;
+    public $name;
+    public $price;
+    public $description;
+    public $image;
+    public $category;
+}
+
+//class client
+class Client
+{
+    public $id;
+    public $firstname;
+    public $lastname;
+    public $login;
+    public $civility;
+    public $phone;
+    public $email;
+    public $password;
+    public $address;
+    public $city;
+    public $codeCity;
+    public $country;
+}
 
 //create JWT
 function createJWT(Response $response, $login, $password): Response{
@@ -36,7 +66,7 @@ $options = [
     "algorithm" => ["HS256"],
     "secret" => JWT_SECRET,
     "path" => ["/api"],
-    "ignore" => ["/api/hello", "/api/login", "/api/client"],
+    "ignore" => ["/api/login", "/api/client"],
     "error" => function ($response, $arguments) {
         $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
         $response = $response->withStatus(401);
@@ -62,7 +92,7 @@ function  addHeaders (Response $response) : Response {
 $app->post('/api/login', function (Request $request, Response $response, $args) {   
     $err=false;
     $inputJSON = file_get_contents('php://input');
-    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
+    $body = json_decode( $inputJSON, TRUE ); 
     $login = $body['login'] ?? ""; 
     $password = $body['password'] ?? "";
 
@@ -70,8 +100,11 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     if (empty($login) || empty($password)|| !preg_match("/^[a-zA-Z0-9]+$/", $login) || !preg_match("/^[a-zA-Z0-9]+$/", $password)) {
         $err=true;
     }
+
+    global $entityManager;
+    $user = $entityManager->getRepository('User')->findOneBy(array('login' => $login, 'password' => $password));
  
-    if (!$err) {
+    if (!$err && $user) {
         $response = createJwT($response, $login, $password);
         $response = addHeaders($response);
         $data = array('login' => $login);
@@ -83,43 +116,25 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     return $response;
 });
 
-//hello
-$app->get('/api/hello/{name}', function (Request $request, Response $response, $args) {
-    $array = [];
-    $array ["nom"] = $args ['name'];
-    $response->getBody()->write(json_encode ($array));
-    return $response;
-});
-
-//get user 
-$app->get('/api/user', function (Request $request, Response $response, $args) {
-    $array = [];
-    $array ["nom"] = "Eber";
-    $array ["prenom"] = "Fanny";
-    $response = addHeaders($response);
-    $response->getBody()->write(json_encode ($array));
-    return $response;
-});
 #endregion
 
 #region PRODUCTS
 
 //get all product from ./mock/catalogue.json
 $app->get('/api/product', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/catalogue.json");
+    global $entityManager;
+    $products = $entityManager->getRepository('Product')->findAll();
     $response = addHeaders($response);
-    $response->getBody()->write($json);
+    $response->getBody()->write(json_encode ($products));
     return $response;
 });
 
 //get product by id from ./mock/catalogue.json
 $app->get('/api/product/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/catalogue.json");
-    $array = json_decode($json, true);
-    $id = $args ['id'];
-    $array = $array[$id];
+    global $entityManager;
+    $product = $entityManager->getRepository('Product')->findOneBy(array('id' => $args['id']));
     $response = addHeaders($response);
-    $response->getBody()->write(json_encode ($array));
+    $response->getBody()->write(json_encode ($product));
     return $response;
 });
 
@@ -127,12 +142,12 @@ $app->get('/api/product/{id}', function (Request $request, Response $response, $
 $app->post('/api/product', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
+    $id = $body ['id'] ?? "";
     $name = $body ['name'] ?? ""; 
     $price = $body ['price'] ?? "";
     $description = $body ['description'] ?? "";
     $image = $body ['image'] ?? "";
     $category = $body ['category'] ?? "";
-    $recipe = $body ['recipe'] ?? "";
     $err=false;
 
     //check format name, price, description and image
@@ -143,14 +158,18 @@ $app->post('/api/product', function (Request $request, Response $response, $args
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/catalogue.json");
-        $array = json_decode($json, true);
-        $id = count($array);
-        $array[] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
-        $json = json_encode($array);
-        file_put_contents("./mock/catalogue.json", $json);
+        global $entityManager;
+        $product = new Product();
+        $product->setName($name);
+        $product->setPrice($price);
+        $product->setDescription($description);
+        $product->setImage($image);
+        $product->setCategory($category);
+        $product->setId($id);
+        $entityManager->persist($product);
+        $entityManager->flush();
         $response = addHeaders($response);
-        $response->getBody()->write($json);
+        $response->getBody()->write(json_encode ($product));
     }
     else{          
         $response = $response->withStatus(401);
@@ -167,7 +186,6 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
     $description = $body ['description'] ?? "";
     $image = $body ['image'] ?? "";
     $category = $body ['category'] ?? "";
-    $recipe = $body ['recipe'] ?? "";
     $err=false;
 
     //check format name, price, description and image
@@ -178,14 +196,18 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/catalogue.json");
-        $array = json_decode($json, true);
         $id = $args ['id'];
-        $array[$id] = array('id' => $id, 'name' => $name, 'price' => $price, 'description' => $description, 'image' => $image, 'category' => $category, 'recipe' => $recipe);
-        $json = json_encode($array);
-        file_put_contents("./mock/catalogue.json", $json);
+        global $entityManager;
+        $product = $entityManager->getRepository('Product')->findOneBy(array('id' => $id));
+        $product->setName($name);
+        $product->setPrice($price);
+        $product->setDescription($description);
+        $product->setImage($image);
+        $product->setCategory($category);
+        $entityManager->persist($product);
+        $entityManager->flush();
         $response = addHeaders($response);
-        $response->getBody()->write($json);
+        $response->getBody()->write(json_encode ($product));
     }
     else{          
         $response = $response->withStatus(401);
@@ -195,14 +217,13 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
 
 //delete product to ./mock/catalogue.json
 $app->delete('/api/product/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/catalogue.json");
-    $array = json_decode($json, true);
     $id = $args ['id'];
-    unset($array[$id]);
-    $json = json_encode($array);
-    file_put_contents("./mock/catalogue.json", $json);
-    $response->getBody()->write($json);
+    global $entityManager;
+    $product = $entityManager->getRepository('Product')->findOneBy(array('id' => $id));
+    $entityManager->remove($product);
+    $entityManager->flush();
     $response = addHeaders($response);
+    $response->getBody()->write(json_encode ($product));
     return $response;
 });
 
@@ -212,20 +233,20 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 
 //get all client from ./mock/clients.json
 $app->get('/api/client', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
+    global $entityManager;
+    $clients = $entityManager->getRepository('Client')->findAll();
     $response = addHeaders($response);
-    $response->getBody()->write($json);
+    $response->getBody()->write(json_encode ($clients));
     return $response;
 });
 
 //get client by id from ./mock/clients.json
 $app->get('/api/client/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
-    $array = json_decode($json, true);
+    global $entityManager;
     $id = $args ['id'];
-    $array = $array[$id];
+    $client = $entityManager->getRepository('Client')->findOneBy(array('id' => $id));
     $response = addHeaders($response);
-    $response->getBody()->write(json_encode ($array));
+    $response->getBody()->write(json_encode ($client));
     return $response;
 });
 
@@ -256,16 +277,24 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     }
 
     if (!$err) {
-        // $json = file_get_contents("./mock/clients.json");
-        // $array = json_decode($json, true);
-        // $id = count($array);
-
-        //Create a new client in an array
-        $array = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
-        $json = json_encode($array);
-        // file_put_contents("./mock/clients.json", $json);
+        global $entityManager;
+        $client = new Client();
+        $client->setId($id);
+        $client->setLastname($lastName);
+        $client->setFirstname($firstName);
+        $client->setEmail($email);
+        $client->setPhone($phone);
+        $client->setAddress($address);
+        $client->setCity($city);
+        $client->setCodeCity($codeCity);
+        $client->setCountry($country);
+        $client->setLogin($login);
+        $client->setPassword($password);
+        $client->setCivility($civility);
+        $entityManager->persist($client);
+        $entityManager->flush();
         $response = addHeaders($response);
-        $response->getBody()->write($json);
+        $response->getBody()->write(json_encode ($client));
     }
     else{          
         $response = $response->withStatus(401);
@@ -299,14 +328,24 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
     }
 
     if (!$err) {
-        $json = file_get_contents("./mock/clients.json");
-        $array = json_decode($json, true);
         $id = $args ['id'];
-        $array[$id] = array('id' => $id, 'lastName' => $lastName, 'firstName' => $firstName, 'email' => $email, 'phone' => $phone, 'address' => $address, 'city' => $city, 'codeCity' => $codeCity, 'country' => $country, 'login' => $login, 'password' => $password, 'civility' => $civility);
-        $json = json_encode($array);
-        file_put_contents("./mock/clients.json", $json);
+        global $entityManager;
+        $client = $entityManager->find('Client', $id);
+        $client->setLastname($lastName);
+        $client->setFirstname($firstName);
+        $client->setEmail($email);
+        $client->setPhone($phone);
+        $client->setAddress($address);
+        $client->setCity($city);
+        $client->setCodeCity($codeCity);
+        $client->setCountry($country);
+        $client->setLogin($login);
+        $client->setPassword($password);
+        $client->setCivility($civility);
+        $entityManager->persist($client);
+        $entityManager->flush();
         $response = addHeaders($response);
-        $response->getBody()->write($json);
+        $response->getBody()->write(json_encode ($client));
     }
     else{          
         $response = $response->withStatus(401);
@@ -316,14 +355,13 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
 
 //delete client to ./mock/clients.json
 $app->delete('/api/client/{id}', function (Request $request, Response $response, $args) {
-    $json = file_get_contents("./mock/clients.json");
-    $array = json_decode($json, true);
     $id = $args ['id'];
-    unset($array[$id]);
-    $json = json_encode($array);
-    file_put_contents("./mock/clients.json", $json);
+    global $entityManager;
+    $client = $entityManager->find('Client', $id);
+    $entityManager->remove($client);
+    $entityManager->flush();
     $response = addHeaders($response);
-    $response->getBody()->write($json);
+    $response->getBody()->write(json_encode ($client));
     return $response;
 });
 
@@ -334,5 +372,6 @@ $app->add(new Tuupola\Middleware\CorsMiddleware([
     "methods" => ["GET", "POST", "PUT", "PATCH", "DELETE"],
     "headers.allow" => ["Authorization", "Content-Type"],
     "headers.expose" => ["Authorization"],
+    "headers.origin" => ["*"],
 ]));
 $app->run ();
