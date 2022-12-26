@@ -159,7 +159,7 @@ $app->post('/api/product', function (Request $request, Response $response, $args
 
     if (!$err) {
         global $entityManager;
-        $product = new Product();
+        $product = new Product;
         $product->setName($name);
         $product->setPrice($price);
         $product->setDescription($description);
@@ -278,7 +278,7 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
 
     if (!$err) {
         global $entityManager;
-        $client = new Client();
+        $client = new Client;
         $client->setId($id);
         $client->setLastname($lastName);
         $client->setFirstname($firstName);
