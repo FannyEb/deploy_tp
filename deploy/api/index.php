@@ -40,7 +40,7 @@ $options = [
     "algorithm" => ["HS256"],
     "secret" => JWT_SECRET,
     "path" => ["/api"],
-    "ignore" => ["/api/login", "/api/client"],
+    "ignore" => ["/api/login", "/api/signup"],
     "error" => function ($response, $arguments) {
         $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
         $response = $response->withStatus(401);
@@ -225,7 +225,7 @@ $app->get('/api/client/{id}', function (Request $request, Response $response, $a
 });
 
 //add client to the array ./mock/clients.json
-$app->post('/api/client', function (Request $request, Response $response, $args) {
+$app->post('/api/signup', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array
     $lastName = $body ['lastName'] ?? ""; 
