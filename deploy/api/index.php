@@ -6,7 +6,7 @@ use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/models/Client.php';
+require_once __DIR__ . '/models/User.php';
 require_once __DIR__ . '/models/Product.php';
  
 const JWT_SECRET = "makey1234567";
@@ -76,7 +76,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     }
 
     global $entityManager;
-    $user = $entityManager->getRepository('Client')->findOneBy(array('login' => $login, 'password' => $password));
+    $user = $entityManager->getRepository('User')->findOneBy(array('login' => $login, 'password' => $password));
     $id = $user->getId();
 
     if (!$err && $user) {
@@ -208,7 +208,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 //get all client from ./mock/clients.json
 $app->get('/api/client', function (Request $request, Response $response, $args) {
     global $entityManager;
-    $clients = $entityManager->getRepository('Client')->findAll();
+    $clients = $entityManager->getRepository('User')->findAll();
     $response = addHeaders($response);
     $response->getBody()->write(json_encode ($clients));
     return $response;
@@ -218,7 +218,7 @@ $app->get('/api/client', function (Request $request, Response $response, $args) 
 $app->get('/api/client/{id}', function (Request $request, Response $response, $args) {
     global $entityManager;
     $id = $args ['id'];
-    $client = $entityManager->getRepository('Client')->findOneBy(array('id' => $id));
+    $client = $entityManager->getRepository('User')->findOneBy(array('id' => $id));
     $response = addHeaders($response);
     $response->getBody()->write(json_encode ($client));
     return $response;
@@ -251,7 +251,7 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
 
     if (!$err) {
         global $entityManager;
-        $client = new Client;
+        $client = new User;
         $client->setLastname($lastName);
         $client->setFirstname($firstName);
         $client->setEmail($email);
@@ -269,7 +269,10 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
         $response->getBody()->write(json_encode ($client));
     }
     else{          
+        //401 with error message
         $response = $response->withStatus(401);
+        $response->getBody()->write(json_encode ($err));
+
     }
     return $response;
 });
@@ -329,7 +332,7 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
 $app->delete('/api/client/{id}', function (Request $request, Response $response, $args) {
     $id = $args ['id'];
     global $entityManager;
-    $client = $entityManager->find('Client', $id);
+    $client = $entityManager->find('User', $id);
     $entityManager->remove($client);
     $entityManager->flush();
     $response = addHeaders($response);
