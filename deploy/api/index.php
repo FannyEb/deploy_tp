@@ -140,7 +140,6 @@ $app->post('/api/product', function (Request $request, Response $response, $args
         $product->setDescription($description);
         $product->setImage($image);
         $product->setCategory($category);
-        $product->setId($id);
         $entityManager->persist($product);
         $entityManager->flush();
         $response = addHeaders($response);
@@ -229,7 +228,6 @@ $app->get('/api/client/{id}', function (Request $request, Response $response, $a
 $app->post('/api/client', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array
-    $id = $body ['id'] ?? ""; 
     $lastName = $body ['lastName'] ?? ""; 
     $firstName = $body ['firstName'] ?? "";
     $email = $body ['email'] ?? "";
@@ -254,7 +252,6 @@ $app->post('/api/client', function (Request $request, Response $response, $args)
     if (!$err) {
         global $entityManager;
         $client = new Client;
-        $client->setId($id);
         $client->setLastname($lastName);
         $client->setFirstname($firstName);
         $client->setEmail($email);
