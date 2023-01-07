@@ -6,7 +6,7 @@ use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/models/Client.php';
+require_once __DIR__ . '/models/User.php';
 require_once __DIR__ . '/models/Product.php';
  
 const JWT_SECRET = "makey1234567";
