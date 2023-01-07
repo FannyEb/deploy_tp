@@ -56,6 +56,10 @@ class Client
     {
         $this->id = $id;
     }
+    public function getId()
+    {
+        return $this->id;
+    }
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
