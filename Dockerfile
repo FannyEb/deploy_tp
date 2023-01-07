@@ -45,7 +45,7 @@ RUN rm -rf ./api/models/*
 
 RUN php vendor/bin/doctrine orm:generate-entities --regenerate-entities=true --generate-annotations=false --update-entities=true --generate-methods=false ./api/models
 
-RUN cat ./api/models/Client.php
+RUN cat ./api/models/User.php
 RUN cat ./api/models/Product.php
 RUN composer update
 
