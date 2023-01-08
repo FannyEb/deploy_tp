@@ -236,21 +236,7 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
     $civility = $body ['civility'] ?? "";
     $err=false;
 
-    //check format name, email and password
-    if (empty($lastName) ||
-     empty($firstName) || 
-     empty($email) || 
-     empty($phone) || 
-     empty($address) || 
-     empty($city) || 
-     empty($codecity) || 
-     empty($country) || 
-     empty($login) || 
-     empty($password) || 
-     empty($civility)) {
-        $err=true;
-    }
-
+    
     if (!$err) {
         global $entityManager;
         $client = new Client;
