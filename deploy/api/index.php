@@ -6,7 +6,7 @@ use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap.php';
-require_once __DIR__ . '/models/User.php';
+require_once __DIR__ . '/models/Client.php';
 require_once __DIR__ . '/models/Product.php';
  
 const JWT_SECRET = "makey1234567";
@@ -76,7 +76,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     }
 
     global $entityManager;
-    $user = $entityManager->getRepository('User')->findOneBy(array('login' => $login, 'password' => $password));
+    $user = $entityManager->getRepository('Client')->findOneBy(array('login' => $login, 'password' => $password));
     $id = $user->getId();
 
     if (!$err && $user) {
@@ -95,7 +95,6 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 
 #region PRODUCTS
 
-//get all product from ./mock/catalogue.json
 $app->get('/api/product', function (Request $request, Response $response, $args) {
     global $entityManager;
     $products = $entityManager->getRepository('Product')->findAll();
@@ -104,7 +103,6 @@ $app->get('/api/product', function (Request $request, Response $response, $args)
     return $response;
 });
 
-//get product by id from ./mock/catalogue.json
 $app->get('/api/product/{id}', function (Request $request, Response $response, $args) {
     global $entityManager;
     $product = $entityManager->getRepository('Product')->findOneBy(array('id' => $args['id']));
@@ -113,7 +111,6 @@ $app->get('/api/product/{id}', function (Request $request, Response $response, $
     return $response;
 });
 
-//add product to ./mock/catalogue.json
 $app->post('/api/product', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
@@ -151,7 +148,6 @@ $app->post('/api/product', function (Request $request, Response $response, $args
     return $response;
 });
 
-//update product to ./mock/catalogue.json
 $app->put('/api/product/{id}', function (Request $request, Response $response, $args) {
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
@@ -189,7 +185,6 @@ $app->put('/api/product/{id}', function (Request $request, Response $response, $
     return $response;
 });
 
-//delete product to ./mock/catalogue.json
 $app->delete('/api/product/{id}', function (Request $request, Response $response, $args) {
     $id = $args ['id'];
     global $entityManager;
@@ -208,7 +203,7 @@ $app->delete('/api/product/{id}', function (Request $request, Response $response
 //get all client from ./mock/clients.json
 $app->get('/api/client', function (Request $request, Response $response, $args) {
     global $entityManager;
-    $clients = $entityManager->getRepository('User')->findAll();
+    $clients = $entityManager->getRepository('Client')->findAll();
     $response = addHeaders($response);
     $response->getBody()->write(json_encode ($clients));
     return $response;
@@ -218,7 +213,7 @@ $app->get('/api/client', function (Request $request, Response $response, $args) 
 $app->get('/api/client/{id}', function (Request $request, Response $response, $args) {
     global $entityManager;
     $id = $args ['id'];
-    $client = $entityManager->getRepository('User')->findOneBy(array('id' => $id));
+    $client = $entityManager->getRepository('Client')->findOneBy(array('id' => $id));
     $response = addHeaders($response);
     $response->getBody()->write(json_encode ($client));
     return $response;
@@ -251,7 +246,7 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
 
     if (!$err) {
         global $entityManager;
-        $client = new User;
+        $client = new Client;
         $client->setLastname($lastName);
         $client->setFirstname($firstName);
         $client->setEmail($email);
@@ -332,7 +327,7 @@ $app->put('/api/client/{id}', function (Request $request, Response $response, $a
 $app->delete('/api/client/{id}', function (Request $request, Response $response, $args) {
     $id = $args ['id'];
     global $entityManager;
-    $client = $entityManager->find('User', $id);
+    $client = $entityManager->find('Client', $id);
     $entityManager->remove($client);
     $entityManager->flush();
     $response = addHeaders($response);
