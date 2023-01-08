@@ -40,10 +40,10 @@ RUN php vendor/bin/doctrine orm:convert-mapping --namespace="" --force --from-da
 
 RUN ls -al
 
-# RUN mkdir ./src
-RUN rm -rf ./api/models/*
+RUN mkdir ./src
+# RUN rm -rf ./api/models/*
 
-RUN php vendor/bin/doctrine orm:generate-entities --regenerate-entities=true --generate-annotations=false --update-entities=true --generate-methods=false ./api/models
+RUN php vendor/bin/doctrine orm:generate-entities --generate-annotations=false --update-entities=true --generate-methods=false ./api/models
 
 RUN composer update
 
