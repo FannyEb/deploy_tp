@@ -265,8 +265,21 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
     }
     else{          
         //401 with error message
+        $client = new Client;
+        $client->setLastname($lastName);
+        $client->setFirstname($firstName);
+        $client->setEmail($email);
+        $client->setPhone($phone);
+        $client->setAddress($address);
+        $client->setCity($city);
+        $client->setCodecity($codecity);
+        $client->setCountry($country);
+        $client->setLogin($login);
+        $client->setPassword($password);
+        $client->setCivility($civility);
         $response = $response->withStatus(401);
         $response->getBody()->write(json_encode ($err));
+        $response->getBody()->write(json_encode ($client));
 
     }
     return $response;
