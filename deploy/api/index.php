@@ -237,10 +237,17 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
     $err=false;
 
     //check format name, email and password
-    if (empty($lastName) || empty($firstName) || empty($email) || empty($phone) || empty($address) || empty($city) || empty($codecity) || empty($country) || empty($login) || empty($password) || empty($civility) || 
-        !preg_match("/^[a-zA-Z0-9]+$/", $lastName) || !preg_match("/^[a-zA-Z0-9]+$/", $firstName) ||  
-        !preg_match("/^[a-zA-Z0-9]+$/", $city) || 
-        !preg_match("/^[0-9]+$/", $codecity) || !preg_match("/^[a-zA-Z0-9]+$/", $country) || !preg_match("/^[a-zA-Z0-9]+$/", $civility)) {
+    if (empty($lastName) ||
+     empty($firstName) || 
+     empty($email) || 
+     empty($phone) || 
+     empty($address) || 
+     empty($city) || 
+     empty($codecity) || 
+     empty($country) || 
+     empty($login) || 
+     empty($password) || 
+     empty($civility)) {
         $err=true;
     }
 
@@ -265,21 +272,8 @@ $app->post('/api/signup', function (Request $request, Response $response, $args)
     }
     else{          
         //401 with error message
-        $client = new Client;
-        $client->setLastname($lastName);
-        $client->setFirstname($firstName);
-        $client->setEmail($email);
-        $client->setPhone($phone);
-        $client->setAddress($address);
-        $client->setCity($city);
-        $client->setCodecity($codecity);
-        $client->setCountry($country);
-        $client->setLogin($login);
-        $client->setPassword($password);
-        $client->setCivility($civility);
         $response = $response->withStatus(401);
         $response->getBody()->write(json_encode ($err));
-        $response->getBody()->write(json_encode ($client));
 
     }
     return $response;
