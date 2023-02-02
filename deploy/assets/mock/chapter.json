@@ -1,0 +1,57 @@
+[
+    {
+        "id": "1",
+        "name": "Commencer un projet angular",
+        "idClass": "1",
+        "content":"assets/chapters/class1chapter1.pdf"
+    },
+    {
+        "id": "2",
+        "name": "Le routing",
+        "idClass": "1",
+        "content":""
+    },
+    {
+        "id":"3",
+        "name": "Les directives",
+        "idClass": "1",
+        "content":""
+    },
+    {
+        "id": "7",
+        "name": "Logique ensembliste",
+        "idClass":"3",
+        "content":"assets/chapters/class3chapter7.pdf"
+    },
+    {
+        "id": "8",
+        "name": "Logique booléenne",
+        "idClass":"3",
+        "content":"assets/chapters/class3chapter8.pdf"
+    },
+    {
+        "id":"9",
+        "name": "La théorie des graphes",
+        "idClass":"3",
+        "content":"assets/chapters/class3chapter9.pdf"
+    },{
+        "id":"10",
+        "name": "Design pattern de création",
+        "idClass":"4",
+        "content":"assets/chapters/class4chapter10.pdf"
+    },
+    {
+        "id":"11",
+        "name": "Design pattern de structure",
+        "idClass":"4",
+        "content":"assets/chapters/class4chapter11.pdf"
+    },
+    {
+        "id":"12",
+        "name": "Problèmes de flux maximum",
+        "idClass":"3",
+        "content":"assets/chapters/class3chapter12.pdf"
+    }
+
+
+]
